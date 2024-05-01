@@ -28,7 +28,7 @@ module Mastermind
     
 
     def play_game
-      random_code
+      # random_code
       colours(random_nums)
       get_player_guess
       # correct_color_and_position?
