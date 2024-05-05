@@ -21,17 +21,19 @@ module Mastermind
       @codebreaker = human_player_class.new
       @intro = intro
       @guesses = []
-      @code = Array.new
+      # @code = Array.new
+      @random_nums = Array.new
       @code_to_break = []
       # @codemaker = ComputerPlayer.new
     end
     
 
     def play_game
-      # random_code
-      colours(random_nums)
-      get_player_guess
-      # correct_color_and_position?
+      auto_code_maker
+      # colours(random_nums)
+      # players_guess
+      # any_colours_in_the_code?
+      correct_color_and_position?
       # has_won?
     end
     
@@ -43,27 +45,29 @@ module Mastermind
       puts "Thanks #{@codebreaker.name}, Welcome to Mastermind.
       Can you guess the 4 colours chosen by the codemaker?
       There are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).
-      You have 12 attempts to break the code.
-      Please enter your first 4 guesses. no commas just a space between each colour."
+      You have 12 attempts to break the code."
+      # Please enter your first 4 guesses. no commas just a space between each colour."
     end
     
     def random_nums
-      POSITIONS.flatten.each do |i| 
-        i = rand(0..5)
-        code << i
+      POSITIONS.flatten.each do |positions| 
+        positions = rand(0..5)
+        @random_nums << positions
       end
-      p code
+      @random_nums
     end
 
-    def colours(nums)
-      nums.each {|col| p code_to_break << COLOURS[col]}
+    def auto_code_maker
+      random_nums.each {|positions| p code_to_break << COLOURS[positions]}
+      puts "The Computer has generated a code for you to try and guess...may the force be with you."
     end
 
-    # def can_it?
-    #   p code_to_break
-    # end
-
-    def get_player_guess
+    def any_colours_in_the_code?
+      @guesses.each {|cols| p code_to_break(cols)}
+    end
+    
+    def players_guess
+      puts "Please enter your first 4 guesses. no commas just a space between each colour."
       player_input = gets.chomp
       @guesses = player_input.split
       p @guesses
@@ -79,12 +83,11 @@ module Mastermind
     end
 
     def correct_color_and_position?
-      correct_combo = []
-      (1..4).each do |posi|
-        correct_combo << if @guesses[posi] == random_code[posi]
-        p correct_combo
+      # correct_combo = []
+      players_guess.each_with_index do |colour, position|
+        p @code_to_break[position].include?(colour)
+        # p correct_combo
       end
-    end
     end
 
     def feedback
