@@ -17,6 +17,7 @@ module Mastermind
     attr_accessor :codebreaker, :code, :code_to_break
     
     def initialize(human_player_class)
+      # @code_maker = computer_player_class.new
       @get_name = get_name
       @codebreaker = human_player_class.new
       @intro = intro
@@ -30,9 +31,6 @@ module Mastermind
 
     def play_game
       auto_code_maker
-      # colours(random_nums)
-      # players_guess
-      # any_colours_in_the_code?
       correct_color_and_position?
       # has_won?
     end
@@ -46,7 +44,6 @@ module Mastermind
       Can you guess the 4 colours chosen by the codemaker?
       There are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).
       You have 12 attempts to break the code."
-      # Please enter your first 4 guesses. no commas just a space between each colour."
     end
     
     def random_nums
@@ -58,8 +55,9 @@ module Mastermind
     end
 
     def auto_code_maker
-      random_nums.each {|positions| p code_to_break << COLOURS[positions]}
+      random_nums.each {|positions| code_to_break << COLOURS[positions]}
       puts "The Computer has generated a code for you to try and guess...may the force be with you."
+      p code_to_break
     end
 
     def any_colours_in_the_code?
@@ -68,9 +66,8 @@ module Mastermind
     
     def players_guess
       puts "Please enter your first 4 guesses. no commas just a space between each colour."
-      player_input = gets.chomp
-      @guesses = player_input.split
-      p @guesses
+      player_input = gets.chomp.split
+      # player_input.split
     end
     
 
