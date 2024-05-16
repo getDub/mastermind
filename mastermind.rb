@@ -1,62 +1,70 @@
-#Colour selection
-#Feedback on selection - dots - winner
-#Human code selector
-#Computer guesser
-
-#Codemaker
 module Mastermind
-  COLOURS = ['Red', 'Green', 'Blue', 'Cyan', 'Pink', 'Yellow']
-  
-  
-  
-#Rules intro
+  COLOURS = ['Red', 'Green', 'Blue', 'Cyan', 'Pink', 'Yellow'].freeze
+  POSITIONS = [[1, 2, 3, 4]]
   
   class Game
     
-    @@peg_positions = [[1, 2, 3, 4]]
-    #@@colours = [['Red', 'Green', 'Blue', 'Pink', 'Yellow']]
-
-    attr_accessor :codebreaker
-    attr_writer :num_of_attempts
-
+    attr_accessor :codebreaker, :code, :code_to_break, :attempts
+    
     def initialize(human_player_class)
-      @get_name = get_name
-      @codebreaker = human_player_class.new
-      @intro = intro
-      #@name = name
+      @code_breaker = human_player_class.new(self)
+      @code_maker = ComputerPlayer.new(self)
     end
     
-    @guesses = []
-
     def play_game
-      12
+      intro(@code_breaker)
+      feedback
     end
     
-    def get_name
-      puts 'Hi player, please enter your name.'
-    end
-
-    def intro
-      puts "Thanks #{self.codebreaker.name}, Welcome to Mastermind.
+    def intro(player)
+      name = player.get_name
+      puts "Thanks #{name}, Welcome to Mastermind.
       Can you guess the 4 colours chosen by the codemaker?
       There are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).
-      You have 12 attempts to break the code.
-      Please enter your first 4 guesses. no commas just a space between each colour."
-      self.guess
+      You have 12 attempts to break the code."
     end
 
+    # def computer_generated_code(from_the_code_maker)
+    #   code_makers_code = from_the_code_maker.auto_code_maker
+    #   # p code_makers_code
+    # end
+    
+    def computer_generated_code
+      @code_maker.auto_code_maker
+    end
+    
     def guess
-      player_input = gets.chomp
-      @guesses = player_input.split
-      # p @guesses
+      guess = @code_breaker.players_guess
+      p guess
     end
 
-    def compare_code
-      @guesses ==       
+    def correct_color_and_position?
+      code = computer_generated_code
+      guess = @code_breaker.players_guess
+      colour_and_position = guess.each_with_index.select do |colour, position|
+        code[position].include?(colour)
+      end
+      colour_and_position.length
     end
+    
+    # def any_colours?
+    #   colours = computer_generated_code
+    #   any_colours.each {|cols| p @code(cols)}
+    # end
+
+    
+    def has_won?
+      if @guesses == COLOURS
+        p 'You won!'
+      else
+        p 'No luck, try again'
+      end
+    end
+
 
     def feedback
-
+      puts "Colours correct =  \n
+      Correct colour and position = #{correct_color_and_position?}"
     end
 
     def print_board
@@ -71,44 +79,53 @@ module Mastermind
         puts positions.join(col_separator).insert(0, front_spacer)
       end
     end
-    
-    
   end
 
   class Player
-    attr_accessor :name
 
-    def initialize
-      @name = gets.chomp
+    def initialize(game)
+      @game = game
     end
   end
 
   class HumanPlayer < Player
-    
-  end
-  
-  class ComputerPlayer
-    attr_accessor :random_code_maker
-    attr_reader :code
-    def initialize
-      @random_code_maker = random_code_maker(COLOURS)
+      
+    def get_name
+      puts 'Hi player, please enter your name.'
+      name = "Clint" #gets.chomp
+      # name
     end
     
-    @code = []
+    def players_guess
+      puts "Please enter your first 4 guesses. No commas just a space between each colour."
+      player_input = gets.chomp.split
+    end
 
-    def random_code_maker(arr)
-      code = []
-      4.times do 
-        @code << arr[Random.rand(0..5)]
-      end
-      p '? | ? | ? | ?'
-      p @code
-    end
-  
   end
+  
+  class ComputerPlayer < Player
+
+    def random_nums
+      rando_nums = [] 
+      POSITIONS.flatten.each do |positions| 
+        positions = rand(0..5)
+        rando_nums << positions
+      end
+      rando_nums
+    end
+    
+    def auto_code_maker
+      code_to_break = []
+      random_nums.each {|positions| code_to_break << COLOURS[positions]}
+      puts "The Computer has generated a code for you to try and guess...may the force be with you."
+      p code_to_break
+    end
+  end
+
+  
   
 end
 
 include Mastermind
 
-Game.new(HumanPlayer)
+Game.new(HumanPlayer).play_game
