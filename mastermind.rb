@@ -4,19 +4,16 @@ module Mastermind
   
   class Game
     
-    attr_accessor :codebreaker, :code, :code_to_break
+    attr_accessor :codebreaker, :code, :code_to_break, :attempts
     
     def initialize(human_player_class)
       @code_breaker = human_player_class.new(self)
       @code_maker = ComputerPlayer.new(self)
-      @guesses = []
-      # @code_to_break = []
     end
     
-
     def play_game
       intro(@code_breaker)
-      correct_color_and_position?
+      feedback
     end
     
     def intro(player)
@@ -27,29 +24,35 @@ module Mastermind
       You have 12 attempts to break the code."
     end
 
-    def computer_generated_code(computer_code)
-      computer_code.auto_code_maker
-    end
-    
-    def correct_color_and_position?
-      code = computer_generated_code(@code_maker)
-      guess = @code_breaker.players_guess
-      guess.each_with_index do |colour, position|
-        p code[position].include?(colour)
-        # p correct_combo
-      end
-    end
-
-    def any_colours_in_the_code?
-      @guesses.each {|cols| p code_to_break(cols)}
-    end
-    
-    # def players_guess
-    #   puts "Please enter your first 4 guesses. No commas just a space between each colour."
-    #   player_input = gets.chomp.split
+    # def computer_generated_code(from_the_code_maker)
+    #   code_makers_code = from_the_code_maker.auto_code_maker
+    #   # p code_makers_code
     # end
     
+    def computer_generated_code
+      @code_maker.auto_code_maker
+    end
+    
+    def guess
+      guess = @code_breaker.players_guess
+      p guess
+    end
 
+    def correct_color_and_position?
+      code = computer_generated_code
+      guess = @code_breaker.players_guess
+      colour_and_position = guess.each_with_index.select do |colour, position|
+        code[position].include?(colour)
+      end
+      colour_and_position.length
+    end
+    
+    # def any_colours?
+    #   colours = computer_generated_code
+    #   any_colours.each {|cols| p @code(cols)}
+    # end
+
+    
     def has_won?
       if @guesses == COLOURS
         p 'You won!'
@@ -60,7 +63,8 @@ module Mastermind
 
 
     def feedback
-
+      puts "Colours correct =  \n
+      Correct colour and position = #{correct_color_and_position?}"
     end
 
     def print_board
@@ -88,8 +92,8 @@ module Mastermind
       
     def get_name
       puts 'Hi player, please enter your name.'
-      name = gets.chomp
-      name
+      name = "Clint" #gets.chomp
+      # name
     end
     
     def players_guess
