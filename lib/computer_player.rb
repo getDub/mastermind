@@ -3,6 +3,9 @@
 class ComputerPlayer #< Player
   attr_reader :code
   include Colourables
+  def initialize
+    @code = COLOURS.sample(4)
+  end
   # COLOURS = ['Red', 'Green', 'Blue', 'Cyan', 'Pink', 'Yellow'].freeze
   # def random_nums
   #   rando_nums = [] 
@@ -19,9 +22,9 @@ class ComputerPlayer #< Player
   #   puts "The Computer has generated a code for you to try and guess...may the force be with you."
   #   p code_to_break
   # end
-  def code
-    puts COLOURS.sample(4)
-  end
+  # def code
+  #   # puts COLOURS.sample(4)
+  # end
 end
 
 # player = ComputerPlayer.new

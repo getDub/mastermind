@@ -3,7 +3,7 @@ class Game
   
   def initialize(human_player_class)
     puts 'Hi player, please enter your name.'
-    puts @code_breaker = human_player_class.new#(self)
+    @code_breaker = human_player_class.new#(self)
     # puts @human_player_name = Player.new(self)
     puts @code_maker = ComputerPlayer.new#(self)
   end
@@ -19,6 +19,7 @@ class Game
     There are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).
     You have 12 attempts to break the code."
     puts code_maker.code
+    puts code_maker.code
   end
 
   # def computer_generated_code(from_the_code_maker)
@@ -27,17 +28,18 @@ class Game
   # end
   
   def computer_generated_code
-    # @code_maker.code
+    code_maker.code
   end
   
   def guess
     guess = @code_breaker.players_guess
+    # p @code_breaker.players_guess
     p guess
   end
 
   def correct_color_and_position?
     code = computer_generated_code
-    guess = @code_breaker.players_guess
+    # guess = @code_breaker.players_guess
     colour_and_position = guess.each_with_index.select do |colour, position|
       code[position].include?(colour)
     end
