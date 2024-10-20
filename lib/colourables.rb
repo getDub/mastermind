@@ -1,3 +1,3 @@
 module Colourables
-COLOURS = ['Red', 'Green', 'Blue', 'Cyan', 'Pink', 'Yellow'].freeze
+COLOURS = ['red', 'green', 'blue', 'cyan', 'pink', 'yellow'].freeze
 end

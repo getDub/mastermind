@@ -17,15 +17,11 @@ class Game
     puts "Thanks #{player.name}, Welcome to Mastermind.
     Can you guess the 4 colours chosen by the codemaker?
     There are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).
-    You have 12 attempts to break the code."
-    puts code_maker.code
+    You have 12 attempts to break the code.
+    The Computer has generated a code for you to break.
+    Please enter your first 4 guesses. No commas just a space between each colour."
     puts code_maker.code
   end
-
-  # def computer_generated_code(from_the_code_maker)
-  #   code_makers_code = from_the_code_maker.auto_code_maker
-  #   # p code_makers_code
-  # end
   
   def computer_generated_code
     code_maker.code
@@ -33,18 +29,18 @@ class Game
   
   def guess
     guess = @code_breaker.players_guess
-    # p @code_breaker.players_guess
     p guess
   end
 
-  def correct_color_and_position?
+  def correct_position?
     code = computer_generated_code
     # guess = @code_breaker.players_guess
-    colour_and_position = guess.each_with_index.select do |colour, position|
+    position = guess.each_with_index.select do |colour, position|
       code[position].include?(colour)
     end
-    colour_and_position.length
+    position.length
   end
+  
   
   # def any_colours?
   #   colours = computer_generated_code
@@ -62,8 +58,8 @@ class Game
 
 
   def feedback
-    puts "Colours correct =  \n
-    Correct colour and position = #{correct_color_and_position?}"
+    puts "Colours correct =\n
+    Correct position = #{correct_position?}"
   end
 
   def print_board
