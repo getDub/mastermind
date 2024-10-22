@@ -1,14 +1,14 @@
 class HumanPlayer #< Player
       
-  attr_accessor :name
+  attr_accessor :name, :guess
 
   def initialize(name = gets.chomp)
     @name = name
+    @guess
   end
 
   def players_guess
-    player_input = gets.chomp.downcase.split
-    
+    @guess = gets.chomp.downcase.split
   end
 
 end

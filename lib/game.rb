@@ -1,5 +1,5 @@
 class Game
-  attr_accessor :code_maker, :code_breaker, :code, :code_to_break, :attempts
+  attr_accessor :code_maker, :code_breaker, :code, :code_to_break, :attempts, :guess
   
   def initialize(human_player_class)
     puts 'Hi player, please enter your name.'
@@ -10,16 +10,12 @@ class Game
   
   def play_game
     welcome(@code_breaker)
+    @code_breaker.players_guess
     feedback
   end
   
   def welcome(player)
-    puts "Thanks #{player.name}, Welcome to Mastermind.
-    Can you guess the 4 colours chosen by the codemaker?
-    There are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).
-    You have 12 attempts to break the code.
-    The Computer has generated a code for you to break.
-    Please enter your first 4 guesses. No commas just a space between each colour."
+    puts "Thanks #{player.name}, Welcome to Mastermind. \nCan you guess the 4 colours chosen by the codemaker? \nThere are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).  \nYou have 12 attempts to break the code.   \nThe Computer has generated a code for you to break.  \nPlease enter your first 4 guesses. No commas just a space between each colour."
     puts code_maker.code
   end
   
@@ -28,26 +24,28 @@ class Game
   end
   
   def guess
-    guess = @code_breaker.players_guess
-    p guess
+    # guess = @code_breaker.players_guess
+    # guess = @code_breaker.guess
+    p @code_breaker.guess
+    # p guess
   end
 
   def correct_position?
     code = computer_generated_code
-    # guess = @code_breaker.players_guess
-    position = guess.each_with_index.select do |colour, position|
-      # code[position].include?(colour)
+    position = @code_breaker.guess.each_with_index.select do |colour, position|
       code[position].eql?(colour)
-      # code[position] == colour
     end
     position.length
   end
   
   
-  # def any_colours?
-  #   colours = computer_generated_code
-  #   any_colours.each {|cols| p @code(cols)}
-  # end
+  def colours_correct?
+    code = computer_generated_code
+    colours = @code_breaker.guess.each.select do|cols| 
+      code.any?(cols)
+    end
+      colours.length
+  end
 
   
   def has_won?
@@ -60,8 +58,7 @@ class Game
 
 
   def feedback
-    puts "Colours correct =\n
-    Correct position = #{correct_position?}"
+    puts "Colours correct = #{colours_correct?}\nCorrect position = #{correct_position?}"
   end
 
   def print_board
