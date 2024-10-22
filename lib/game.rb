@@ -36,7 +36,9 @@ class Game
     code = computer_generated_code
     # guess = @code_breaker.players_guess
     position = guess.each_with_index.select do |colour, position|
-      code[position].include?(colour)
+      # code[position].include?(colour)
+      code[position].eql?(colour)
+      # code[position] == colour
     end
     position.length
   end
