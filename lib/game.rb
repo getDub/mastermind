@@ -10,8 +10,12 @@ class Game
   
   def play_game
     welcome(@code_breaker)
+    2.times do 
     @code_breaker.players_guess
     feedback
+    # break if colours_correct? == 2 && correct_position? == 2
+    break if win?
+    end
   end
   
   def welcome(player)
@@ -24,10 +28,7 @@ class Game
   end
   
   def guess
-    # guess = @code_breaker.players_guess
-    # guess = @code_breaker.guess
     p @code_breaker.guess
-    # p guess
   end
 
   def correct_position?
@@ -59,6 +60,14 @@ class Game
 
   def feedback
     puts "Colours correct = #{colours_correct?}\nCorrect position = #{correct_position?}"
+    # if colours_correct? == 2 && correct_position? == 2
+    if win?
+      puts "You win"
+    end
+  end
+
+  def win?
+    colours_correct? == 2 && correct_position? == 2
   end
 
   def print_board
