@@ -6,16 +6,18 @@ class Game
     @code_breaker = human_player_class.new#(self)
     # puts @human_player_name = Player.new(self)
     puts @code_maker = ComputerPlayer.new#(self)
+    @attempts = 0
   end
   
   def play_game
     welcome(@code_breaker)
     2.times do 
-    @code_breaker.players_guess
-    feedback
-    # break if colours_correct? == 2 && correct_position? == 2
-    break if win?
+      @attempts += 1
+      @code_breaker.players_guess
+      feedback
+      break if win?
     end
+    exceeded_attempts?
   end
   
   def welcome(player)
@@ -27,6 +29,12 @@ class Game
     code_maker.code
   end
   
+  def exceeded_attempts?
+    if @attempts == 2
+      puts "Sorry but you have had 12 tries and were unable to break the code. The code maker is the Mastermind."
+    end
+  end
+
   def guess
     p @code_breaker.guess
   end
@@ -48,19 +56,8 @@ class Game
       colours.length
   end
 
-  
-  def has_won?
-    if @guesses == COLOURS
-      p 'You won!'
-    else
-      p 'No luck, try again'
-    end
-  end
-
-
   def feedback
     puts "Colours correct = #{colours_correct?}\nCorrect position = #{correct_position?}"
-    # if colours_correct? == 2 && correct_position? == 2
     if win?
       puts "You win"
     end
