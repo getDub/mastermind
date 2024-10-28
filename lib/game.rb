@@ -12,13 +12,14 @@ class Game
   def play_game
     welcome(@code_breaker)
     5.times do 
-    # loop do
       @attempts += 1
       @code_breaker.players_guess
       feedback_on_guess
       guess_again
       break if win? 
     end
+    puts "You win. You are the MASTERMIND!"
+
   end
   
   def welcome(player)
@@ -68,7 +69,7 @@ class Game
   end
 
   def win?
-    puts "You win. You are the MASTERMIND!" if colours_correct? == 2 && correct_position? == 2
+    colours_correct? == 2 && correct_position? == 2
   end
 
   def guess_again
