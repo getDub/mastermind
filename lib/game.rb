@@ -11,17 +11,18 @@ class Game
   
   def play_game
     welcome(@code_breaker)
-    2.times do 
+    5.times do 
+    # loop do
       @attempts += 1
       @code_breaker.players_guess
-      feedback
-      break if win?
+      feedback_on_guess
+      guess_again
+      break if win? 
     end
-    exceeded_attempts?
   end
   
   def welcome(player)
-    puts "Thanks #{player.name}, Welcome to Mastermind. \nCan you guess the 4 colours chosen by the codemaker? \nThere are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).  \nYou have 12 attempts to break the code.   \nThe Computer has generated a code for you to break.  \nPlease enter your first 4 guesses. No commas just a space between each colour."
+    puts "Thanks #{player.name}, Welcome to Mastermind. \nCan you crack the Codmaker's code by guessing the 4 colours in the correct postion?green \nThere are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).  \nYou have 12 attempts to break the code.   \nThe Computer has generated a code for you to break.  \nPlease enter your first 4 guesses. No commas just a space between each colour."
     puts code_maker.code
   end
   
@@ -29,11 +30,17 @@ class Game
     code_maker.code
   end
   
-  def exceeded_attempts?
-    if @attempts == 2
-      puts "Sorry but you have had 12 tries and were unable to break the code. The code maker is the Mastermind."
-    end
-  end
+  # def exceeded_attempts?
+  #   @attempts == 2
+  #     puts "Sorry but you have had 12 tries and were unable to break the code. The code maker is the Mastermind."
+  #   # else
+  #   #   guess_again
+  #   # end
+  # end
+
+  # def end_game
+  #   if @attempts = 13
+  # end
 
   def guess
     p @code_breaker.guess
@@ -56,15 +63,16 @@ class Game
       colours.length
   end
 
-  def feedback
+  def feedback_on_guess
     puts "Colours correct = #{colours_correct?}\nCorrect position = #{correct_position?}"
-    if win?
-      puts "You win"
-    end
   end
 
   def win?
-    colours_correct? == 2 && correct_position? == 2
+    puts "You win. You are the MASTERMIND!" if colours_correct? == 2 && correct_position? == 2
+  end
+
+  def guess_again
+    puts "Please guess again." if correct_position? < 2
   end
 
   def print_board
