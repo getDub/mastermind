@@ -1,4 +1,4 @@
-class HumanPlayer #< Player
+class HumanPlayer < Player
       
   attr_accessor :name, :guess
 
@@ -8,7 +8,14 @@ class HumanPlayer #< Player
   end
 
   def players_guess
+    # begin
     @guess = gets.chomp.downcase.split
+    # rescue 
+      # puts "this is the error #{@guess}?"
+    # else
+      # puts "all good"
+    # end
+
   end
 
 end
