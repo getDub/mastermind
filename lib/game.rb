@@ -13,17 +13,22 @@ class Game
     welcome(@code_breaker)
     5.times do 
       @attempts += 1
+      # begin
       @code_breaker.players_guess
+      # rescue
+        # puts "error error"
+      # else
       feedback_on_guess
+      # end
       guess_again
       break if win? 
-    end
+  end
     puts "You win. You are the MASTERMIND!"
 
   end
   
   def welcome(player)
-    puts "Thanks #{player.name}, Welcome to Mastermind. \nCan you crack the Codmaker's code by guessing the 4 colours in the correct postion?green \nThere are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).  \nYou have 12 attempts to break the code.   \nThe Computer has generated a code for you to break.  \nPlease enter your first 4 guesses. No commas just a space between each colour."
+    puts "Thanks #{player.name}, Welcome to Mastermind. \nCan you crack the Codmaker's code by guessing the 4 colours in the correct postion? \nThere are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).  \nYou have 12 attempts to break the code.   \nThe Computer has generated a code for you to break.  \nPlease enter your first 4 guesses. No commas just a space between each colour."
     puts code_maker.code
   end
   
@@ -43,9 +48,9 @@ class Game
   #   if @attempts = 13
   # end
 
-  def guess
-    p @code_breaker.guess
-  end
+  # def guess
+  #   p @code_breaker.guess
+  # end
 
   def correct_position?
     code = computer_generated_code
@@ -64,8 +69,23 @@ class Game
       colours.length
   end
 
+  def four_colours?
+    # choose_4 = puts "please choose four colours"
+    puts @code_breaker.guess.length
+    if @code_breaker.guess.length != 4 
+       true
+    else
+      false
+    # guess.length != 4 ? choose_4 : @guess
+    end
+  end
+
   def feedback_on_guess
-    puts "Colours correct = #{colours_correct?}\nCorrect position = #{correct_position?}"
+    while four_colours? == true
+      puts "  I dont think you chose 4 colours, try again."
+      @code_breaker.players_guess
+    end
+    puts "  Colours correct = #{colours_correct?}\n  Correct position = #{correct_position?}"
   end
 
   def win?

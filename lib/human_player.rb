@@ -8,14 +8,17 @@ class HumanPlayer < Player
   end
 
   def players_guess
-    # begin
     @guess = gets.chomp.downcase.split
-    # rescue 
-      # puts "this is the error #{@guess}?"
-    # else
-      # puts "all good"
-    # end
-
+  # @guess = gets.chomp.downcase.split
+    # four_colours?
+    # @guess
   end
+
+  # def four_colours?
+  #   # choose_4 = puts "please choose four colours"
+  #   if guess.length != 4 then puts "please choose four colours" 
+  #   # guess.length != 4 ? choose_4 : @guess
+  #   end
+  # end
 
 end
