@@ -11,24 +11,15 @@ class Game
   
   def play_game
     welcome(@code_breaker)
-    5.times do 
-      @attempts += 1
-      # begin
+    while @attempts < 5 do
+      puts "Code break attempt #{@attempts += 1}"
       @code_breaker.players_guess
-      # rescue
-        # puts "error error"
-      # else
       feedback_on_guess
-      # end
-      guess_again
-      break if win? 
-  end
-    puts "You win. You are the MASTERMIND!"
-
+    end
   end
   
   def welcome(player)
-    puts "Thanks #{player.name}, Welcome to Mastermind. \nCan you crack the Codmaker's code by guessing the 4 colours in the correct postion? \nThere are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).  \nYou have 12 attempts to break the code.   \nThe Computer has generated a code for you to break.  \nPlease enter your first 4 guesses. No commas just a space between each colour."
+    puts "Thanks #{player.name}, Welcome to Mastermind. \nCan you crack the Codmaker's code by guessing the 4 colours in the correct postion? \nThere are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).  \nYou have 12 attempts to break the code.   \nThe Computer has generated a code for you to break.\n    |--?--|--?--|--?--|--?--|  \nPlease enter your first 4 guesses. No commas just a space between each colour."
     puts code_maker.code
   end
   
@@ -36,22 +27,6 @@ class Game
     code_maker.code
   end
   
-  # def exceeded_attempts?
-  #   @attempts == 2
-  #     puts "Sorry but you have had 12 tries and were unable to break the code. The code maker is the Mastermind."
-  #   # else
-  #   #   guess_again
-  #   # end
-  # end
-
-  # def end_game
-  #   if @attempts = 13
-  # end
-
-  # def guess
-  #   p @code_breaker.guess
-  # end
-
   def correct_position?
     code = computer_generated_code
     position = @code_breaker.guess.each_with_index.select do |colour, position|
@@ -59,7 +34,6 @@ class Game
     end
     position.length
   end
-  
   
   def colours_correct?
     code = computer_generated_code
@@ -69,45 +43,52 @@ class Game
       colours.length
   end
 
-  def four_colours?
-    # choose_4 = puts "please choose four colours"
-    puts @code_breaker.guess.length
-    if @code_breaker.guess.length != 4 
-       true
-    else
-      false
-    # guess.length != 4 ? choose_4 : @guess
+  def win?
+    if colours_correct? == 4 && correct_position? == 4 then @attempts = 6
     end
   end
+  
+  def four_colours?
+    @code_breaker.guess.length == 4
+  end
+
 
   def feedback_on_guess
-    while four_colours? == true
-      puts "  I dont think you chose 4 colours, try again."
-      @code_breaker.players_guess
+    if four_colours?
+      puts "  Colours correct = #{colours_correct?}\n  Correct position = #{correct_position?}"
+    else
+      puts "I don't think you chose 4 colours"
+      @attempts -= 1
     end
-    puts "  Colours correct = #{colours_correct?}\n  Correct position = #{correct_position?}"
+    win_or_loose?
   end
 
-  def win?
-    colours_correct? == 2 && correct_position? == 2
+  def guess_limit_reached?
+    @attempts == 5
   end
 
-  def guess_again
-    puts "Please guess again." if correct_position? < 2
+  def win_or_loose?
+    if guess_limit_reached?
+      puts "YOU LOOSE.\nYou've had 12 guesses and haven't broken the code."
+    elsif win?
+      puts "YOU WIN BUDDY!"
+    else
+      puts "Please have another guess."
+    end
   end
 
-  def print_board
-    front_spacer, short_col_separator, col_separator, row_separator = '   ', ' | ', '   |   ', '-------+-------+-------+-------'
+  # def print_board
+  #   front_spacer, short_col_separator, col_separator, row_separator = '   ', ' | ', '   |   ', '-------+-------+-------+-------'
     
-    @@colours.each do |col|
-    puts col.join(short_col_separator).insert(0, front_spacer)
-    puts row_separator
-    end
+  #   @@colours.each do |col|
+  #   puts col.join(short_col_separator).insert(0, front_spacer)
+  #   puts row_separator
+  #   end
 
-    @@peg_positions.each do |positions|
-      puts positions.join(col_separator).insert(0, front_spacer)
-    end
-  end
+  #   @@peg_positions.each do |positions|
+  #     puts positions.join(col_separator).insert(0, front_spacer)
+  #   end
+  # end
 end
 
 # Game.new(HumanPlayer).play_game
