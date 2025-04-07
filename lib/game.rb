@@ -43,6 +43,14 @@ class Game
       colours.length
   end
 
+    def valid_colour?
+      # puts "#{@code_maker.colours}"
+    incorrect_colours = @code_breaker.guess.each_with_index.select do |colour, position|
+      @code_maker.colours[position].eql?(colour)
+       end
+    puts incorrect_colours
+    end
+
   def win?
     if colours_correct? == 4 && correct_position? == 4 then @attempts = 6
     end
@@ -56,9 +64,11 @@ class Game
   def feedback_on_guess
     if four_colours?
       puts "  Colours correct = #{colours_correct?}\n  Correct position = #{correct_position?}"
-    else
+    elsif @code_breaker.guess.length < 4
       puts "I don't think you chose 4 colours"
       @attempts -= 1
+    else
+      valid_colour?
     end
     win_or_loose?
   end

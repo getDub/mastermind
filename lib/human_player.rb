@@ -4,21 +4,33 @@ class HumanPlayer < Player
 
   def initialize(name = gets.chomp)
     @name = name
-    @guess
+    @raw_guess
   end
 
   def players_guess
-    @guess = gets.chomp.downcase.split
-  # @guess = gets.chomp.downcase.split
-    # four_colours?
-    # @guess
+    # @guess = gets.chomp.downcase.split
+    raw_player_input
+    valid_colour2?
+    @guess
+  end
+  
+  def raw_player_input
+    @raw_guess = gets.chomp.downcase.split
+    # p @raw_guess
+
   end
 
-  # def four_colours?
-  #   # choose_4 = puts "please choose four colours"
-  #   if guess.length != 4 then puts "please choose four colours" 
-  #   # guess.length != 4 ? choose_4 : @guess
-  #   end
-  # end
+  def valid_colour2?
+    
+    @raw_guess.each do |item|
+      # p "I dont think this is correct #{item}" if COLOURS.include?(item) == false
+      if COLOURS.include?(item) == false
+        puts "I think you made at least one typo > '#{item}'.\n Please re-type all four colours."
+      players_guess
+      else
+        @guess = @raw_guess
+      end
+    end
+  end
 
 end
