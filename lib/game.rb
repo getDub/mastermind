@@ -1,6 +1,10 @@
 class Game
   attr_accessor :code_maker, :code_breaker, :code, :code_to_break, :attempts, :guess
   
+  COLOURS = ['red', 'green', 'blue', 'cyan', 'pink', 'yellow'].freeze
+  CODE_LENGTH = 4
+  MAX_ATTEMPTS = 5
+
   def initialize(human_player_class)
     puts 'Hi player, please enter your name.'
     @code_breaker = human_player_class.new#(self)
@@ -11,8 +15,8 @@ class Game
   
   def play_game
     welcome(@code_breaker)
-    while @attempts < 5 do
-      puts "Code break attempt #{@attempts += 1}"
+    while @attempts < MAX_ATTEMPTS do
+      puts "\nCode break attempt #{@attempts += 1}"
       @code_breaker.players_guess
       feedback_on_guess
     end
@@ -20,7 +24,7 @@ class Game
   
   def welcome(player)
     puts "Thanks #{player.name}, Welcome to Mastermind. \nCan you crack the Codmaker's code by guessing the 4 colours in the correct postion? \nThere are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).  \nYou have 12 attempts to break the code.   \nThe Computer has generated a code for you to break.\n    |--?--|--?--|--?--|--?--|  \nPlease enter your first 4 guesses. No commas just a space between each colour."
-    puts code_maker.code
+    puts code_maker.code #delete this line once done
   end
   
   def computer_generated_code
@@ -43,32 +47,21 @@ class Game
       colours.length
   end
 
-    def valid_colour?
-      # puts "#{@code_maker.colours}"
-    incorrect_colours = @code_breaker.guess.each_with_index.select do |colour, position|
-      @code_maker.colours[position].eql?(colour)
-       end
-    puts incorrect_colours
-    end
+  def valid_code?
+    @code_breaker.guess.length == CODE_LENGTH && @code_breaker.guess.all? { |colour| COLOURS.include?(colour)}
+  end
 
   def win?
-    if colours_correct? == 4 && correct_position? == 4 then @attempts = 6
+    if colours_correct? == CODE_LENGTH && correct_position? == CODE_LENGTH then @attempts = MAX_ATTEMPTS + 1
     end
   end
   
-  def four_colours?
-    @code_breaker.guess.length == 4
-  end
-
-
   def feedback_on_guess
-    if four_colours?
-      puts "  Colours correct = #{colours_correct?}\n  Correct position = #{correct_position?}"
-    elsif @code_breaker.guess.length < 4
-      puts "I don't think you chose 4 colours"
-      @attempts -= 1
+    if valid_code?
+      puts "  Correct colour = #{colours_correct?}\n  Correct colour and position = #{correct_position?}"
     else
-      valid_colour?
+      puts "\n !!Your code doesn't look right.\n Check you have #{CODE_LENGTH} colours and they are spelled correctly."
+      @attempts -= 1
     end
     win_or_loose?
   end
@@ -83,7 +76,7 @@ class Game
     elsif win?
       puts "YOU WIN BUDDY!"
     else
-      puts "Please have another guess."
+      puts " Please have another guess."
     end
   end
 
