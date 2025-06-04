@@ -1,39 +1,50 @@
 class Game
-  attr_accessor :code_maker, :code_breaker, :code, :code_to_break, :attempts, :guess
+  attr_accessor :computer, :human, :code, :code_to_break, :attempts, :guess
   
   COLOURS = ['red', 'green', 'blue', 'cyan', 'pink', 'yellow'].freeze
   CODE_LENGTH = 4
   MAX_ATTEMPTS = 5
 
   def initialize(human_player_class)
-    puts 'Hi player, please enter your name.'
-    @code_breaker = human_player_class.new#(self)
     # puts @human_player_name = Player.new(self)
-    puts @code_maker = ComputerPlayer.new#(self)
+    puts 'Hi player, please enter your name.'
+    puts @human = human_player_class.new#(self)
+    puts @computer = ComputerPlayer.new#(self)
     @attempts = 0
   end
   
   def play_game
-    welcome(@code_breaker)
+    welcome
+    game_setup
     while @attempts < MAX_ATTEMPTS do
-      puts "\nCode break attempt #{@attempts += 1}"
-      @code_breaker.players_guess
+      puts "\n--- Code break attempt #{@attempts += 1} ---"
+      @human.players_guess
       feedback_on_guess
     end
   end
   
-  def welcome(player)
-    puts "Thanks #{player.name}, Welcome to Mastermind. \nCan you crack the Codmaker's code by guessing the 4 colours in the correct postion? \nThere are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).  \nYou have 12 attempts to break the code.   \nThe Computer has generated a code for you to break.\n    |--?--|--?--|--?--|--?--|  \nPlease enter your first 4 guesses. No commas just a space between each colour."
-    puts code_maker.code #delete this line once done
+  def welcome
+    # puts "Thanks #{player.name}, Welcome to Mastermind. \nCan you crack the Codmaker's code by guessing the 4 colours in the correct postion? \nThere are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).  \nYou have 12 attempts to break the code.   \nThe Computer has generated a code for you to break.\n    |--?--|--?--|--?--|--?--|  \nPlease enter your first 4 guesses. No commas just a space between each colour."
+    puts "Thanks #{human.name}, would you like to be the Code maker (press 1) or the Code Breaker (press 2)"
+    puts computer.code #delete this line once done
+    human.code_breaker_or_maker?
+  end
+
+  def game_setup
+    if human.choice == 1
+      puts "#{human.name} you have chosen to be the Code maker.\n There are 6 colours to choose from, (Red, Green, Blue, Pink, Yellow).  \n Choose only 4 colours to make your code. No commas just a space between each colour."
+      human.make_code
+      code_maker_code_correct?
+    end
   end
   
   def computer_generated_code
-    code_maker.code
+    computer.code
   end
   
   def correct_position?
     code = computer_generated_code
-    position = @code_breaker.guess.each_with_index.select do |colour, position|
+    position = @human.guess.each_with_index.select do |colour, position|
       code[position].eql?(colour)
     end
     position.length
@@ -41,14 +52,18 @@ class Game
   
   def colours_correct?
     code = computer_generated_code
-    colours = @code_breaker.guess.each.select do|cols| 
+    colours = @human.guess.each.select do|cols| 
       code.any?(cols)
     end
       colours.length
   end
 
-  def valid_code?
-    @code_breaker.guess.length == CODE_LENGTH && @code_breaker.guess.all? { |colour| COLOURS.include?(colour)}
+  # def valid_code?
+  #   @human.guess.length == CODE_LENGTH && @human.guess.all? { |colour| COLOURS.include?(colour)}
+  # end
+   
+  def valid_code?(guess_or_code)
+    guess_or_code.length == CODE_LENGTH && guess_or_code.all? { |colour| COLOURS.include?(colour)}
   end
 
   def win?
@@ -56,8 +71,16 @@ class Game
     end
   end
   
+  def code_maker_code_correct?
+    if valid_code?(@human.code)
+      puts "Code looks good to me"
+    else
+      puts "That code aint right"
+    end
+  end
+
   def feedback_on_guess
-    if valid_code?
+    if valid_code?(@human.guess)
       puts "  Correct colour = #{colours_correct?}\n  Correct colour and position = #{correct_position?}"
     else
       puts "\n !!Your code doesn't look right.\n Check you have #{CODE_LENGTH} colours and they are spelled correctly."
