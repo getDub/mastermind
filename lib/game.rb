@@ -33,15 +33,34 @@ class Game
   def game_setup
     if human.choice == 1
       puts "#{human.name} you have chosen to be the Code maker.\n There are 6 colours to choose from, (Red, Green, Blue, Pink, Yellow).  \n Choose only 4 colours to make your code. No commas just a space between each colour."
-      human.make_code
-      code_maker_code_correct?
+      loop do
+        human.make_code
+          if valid_code?(@human.code)
+            puts "Code looks good to me"
+            break
+          else
+            puts "That code aint right"
+          end
+            keep_guessing
+        end
     end
   end
+
+#   if valid_code?(@human.code)
+#     puts "Code looks good to me"
+#   else
+#   end
+#     keep_guessing
+# end
   
   def computer_generated_code
     computer.code
   end
   
+  def keep_guessing
+    puts "please have another guess"
+  end
+
   def correct_position?
     code = computer_generated_code
     position = @human.guess.each_with_index.select do |colour, position|
@@ -71,14 +90,7 @@ class Game
     end
   end
   
-  def code_maker_code_correct?
-    if valid_code?(@human.code)
-      puts "Code looks good to me"
-    else
-      puts "That code aint right"
-    end
-  end
-
+  
   def feedback_on_guess
     if valid_code?(@human.guess)
       puts "  Correct colour = #{colours_correct?}\n  Correct colour and position = #{correct_position?}"
@@ -98,11 +110,19 @@ class Game
       puts "YOU LOOSE.\nYou've had 12 guesses and haven't broken the code."
     elsif win?
       puts "YOU WIN BUDDY!"
-    else
-      puts " Please have another guess."
+    else keep_guessing
+      # puts " Please have another guess."
     end
   end
 
+  def code_maker_code_correct?
+    if valid_code?(@human.code)
+      puts "Code looks good to me"
+    else
+      puts "That code aint right"
+    end
+      keep_guessing
+  end
   # def print_board
   #   front_spacer, short_col_separator, col_separator, row_separator = '   ', ' | ', '   |   ', '-------+-------+-------+-------'
     
