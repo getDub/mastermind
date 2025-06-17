@@ -1,5 +1,5 @@
 class Game
-  attr_accessor :computer, :human, :code, :code_to_break, :attempts, :guess
+  attr_accessor :computer, :human, :code, :code_to_break, :attempts, :guess, :colours
   
   COLOURS = ['red', 'green', 'blue', 'cyan', 'pink', 'yellow'].freeze
   CODE_LENGTH = 4
@@ -44,6 +44,7 @@ class Game
             keep_guessing
         end
       else human.choice == 2
+        puts @computer.code_to_break(COLOURS) #don't print to screen once finished.
         puts "Thanks #{human.name}, Welcome to Mastermind. \nCan you crack the Codmaker's code by guessing the 4 colours in the correct postion? \nThere are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).  \nYou have 12 attempts to break the code.   \nThe Computer has generated a code for you to break.\n    |--?--|--?--|--?--|--?--|  \nPlease enter your first 4 guesses. No commas just a space between each colour."
     end
   end
