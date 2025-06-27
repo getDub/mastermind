@@ -9,53 +9,67 @@ class Game
     # puts @human_player_name = Player.new(self)
     puts 'Hi player, please enter your name.'
     puts @human = human_player_class.new#(self)
-    puts @computer = ComputerPlayer.new#(self)
+    puts @computer = ComputerPlayer.new(COLOURS, CODE_LENGTH)#(self)
     @attempts = 0
+    @guess = nil
+    @code = nil
+    @feedback = nil
   end
   
-  def play_game
+  def start
     welcome
     game_setup
-    while @attempts < MAX_ATTEMPTS do
-      puts "\n--- Code break attempt #{@attempts += 1} ---"
-      @human.players_guess
-      feedback_on_guess
-    end
+    play_game
   end
-  
+
+# Press 1 = Code maker = code
+# Press 2 = Code breaker = guess
+
+
   def welcome
-    # puts "Thanks #{player.name}, Welcome to Mastermind. \nCan you crack the Codmaker's code by guessing the 4 colours in the correct postion? \nThere are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).  \nYou have 12 attempts to break the code.   \nThe Computer has generated a code for you to break.\n    |--?--|--?--|--?--|--?--|  \nPlease enter your first 4 guesses. No commas just a space between each colour."
     puts "Thanks #{human.name}, would you like to be the Code maker (press 1) or the Code Breaker (press 2)"
-    puts computer.code #delete this line once done
     human.code_breaker_or_maker?
   end
 
   def game_setup
     if human.choice == 1
       puts "#{human.name} you have chosen to be the Code maker.\n There are 6 colours to choose from, (Red, Green, Blue, Pink, Yellow).  \n Choose only 4 colours to make your code. No commas just a space between each colour."
+      # @computer.set_s(CODE_LENGTH)
       loop do
-        human.make_code
-          if valid_code?(@human.code)
+        input = human.make_code
+          if valid_code?(input)
             puts "Code looks good to me"
+            @code = input
+            # puts "valid? = @code = #{@code} and human code = #{@human.code}"
             break
           else
             puts "That code aint right"
+            @code = nil
+            
           end
             keep_guessing
-        end
-      else human.choice == 2
-        puts @computer.code_to_break(COLOURS) #don't print to screen once finished.
-        puts "Thanks #{human.name}, Welcome to Mastermind. \nCan you crack the Codmaker's code by guessing the 4 colours in the correct postion? \nThere are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).  \nYou have 12 attempts to break the code.   \nThe Computer has generated a code for you to break.\n    |--?--|--?--|--?--|--?--|  \nPlease enter your first 4 guesses. No commas just a space between each colour."
+          end
+    else #human.choice == 2
+      puts "Thanks #{human.name}, Welcome to Mastermind. \nCan you crack the Codmaker's code by guessing the 4 colours in the correct postion? \nThere are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).  \nYou have 12 attempts to break the code.   \nThe Computer has generated a code for you to break.\n    |--?--|--?--|--?--|--?--|  \nPlease enter your first 4 guesses. No commas just a space between each colour."
+      puts @code = @computer.code_to_break(COLOURS) #don't print to screen once finished.
     end
   end
 
-#   if valid_code?(@human.code)
-#     puts "Code looks good to me"
-#   else
-#   end
-#     keep_guessing
-# end
-  
+  def play_game
+  # def start
+    # welcome
+    # game_setup
+    while @attempts < MAX_ATTEMPTS do
+      #end
+      puts "\n--- Code break attempt #{@attempts += 1} ---"
+      if human.choice == 1? @guess = @computer.take_a_guess(COLOURS) : @guess = @human.players_guess
+      # if human.choice == 1? @guess = @computer.take_a_guess(COLOURS) : @guess = @human.players_guess
+        feedback_on_guess
+        # @human.players_guess
+      end
+    end
+  end
+
   def computer_generated_code
     computer.code
   end
@@ -65,24 +79,26 @@ class Game
   end
 
   def correct_position?
-    code = computer_generated_code
-    position = @human.guess.each_with_index.select do |colour, position|
-      code[position].eql?(colour)
+    # code = computer_generated_code
+    # position = @human.guess.each_with_index.select do |colour, position|
+    position = @guess.each_with_index.select do |colour, position|
+      # code[position].eql?(colour)
+      @code[position].eql?(colour)
     end
     position.length
   end
   
   def colours_correct?
-    code = computer_generated_code
-    colours = @human.guess.each.select do|cols| 
-      code.any?(cols)
+    # code = computer_generated_code
+    # puts @guess
+    # puts "this is code from colours correct\n #{@code}\n and the gues is\n #{@guess}"
+    # colours = @human.guess.each.select do|cols| 
+    colours = @guess.each.select do |cols| 
+      @code.any?(cols)
+      # code.any?(cols)
     end
       colours.length
   end
-
-  # def valid_code?
-  #   @human.guess.length == CODE_LENGTH && @human.guess.all? { |colour| COLOURS.include?(colour)}
-  # end
    
   def valid_code?(guess_or_code)
     guess_or_code.length == CODE_LENGTH && guess_or_code.all? { |colour| COLOURS.include?(colour)}
@@ -93,10 +109,13 @@ class Game
     end
   end
   
-  
   def feedback_on_guess
-    if valid_code?(@human.guess)
+    # if valid_code?(@human.guess)
+    if valid_code?(@guess)
+      puts "The guess = #{@guess}"
       puts "  Correct colour = #{colours_correct?}\n  Correct colour and position = #{correct_position?}"
+      @feedback = [correct_position?, colours_correct?]
+      puts "feedback = #{@feedback}"#delete once finished
     else
       puts "\n !!Your code doesn't look right.\n Check you have #{CODE_LENGTH} colours and they are spelled correctly."
       @attempts -= 1
@@ -114,30 +133,18 @@ class Game
     elsif win?
       puts "YOU WIN BUDDY!"
     else keep_guessing
-      # puts " Please have another guess."
     end
   end
 
-  def code_maker_code_correct?
-    if valid_code?(@human.code)
-      puts "Code looks good to me"
-    else
-      puts "That code aint right"
-    end
-      keep_guessing
-  end
-  # def print_board
-  #   front_spacer, short_col_separator, col_separator, row_separator = '   ', ' | ', '   |   ', '-------+-------+-------+-------'
-    
-  #   @@colours.each do |col|
-  #   puts col.join(short_col_separator).insert(0, front_spacer)
-  #   puts row_separator
+  # def code_maker_code_correct?
+  #   # if valid_code?(@human.code)
+  #   if valid_code?(@code)
+  #     puts "Code looks good to me"
+  #     @code = @human.code
+  #   else
+  #     puts "That code aint right"
   #   end
-
-  #   @@peg_positions.each do |positions|
-  #     puts positions.join(col_separator).insert(0, front_spacer)
-  #   end
+  #     keep_guessing
   # end
+  
 end
-
-# Game.new(HumanPlayer).play_game
