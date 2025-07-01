@@ -9,8 +9,6 @@ class ComputerPlayer #< Player
     @set_s = colours.repeated_permutation(@code_length).to_a
     # @code = COLOURS.sample(4)
     # @code = game.COLOURS.sample(4)
-    # @game = game
-    @received_feedback = nil
   end
  
   def code_to_break(colours)
@@ -28,35 +26,10 @@ class ComputerPlayer #< Player
       @guess = colours[0], colours[0], colours[1], colours[1]
     else
       @guess = colours.sample(4)
+      # puts "#{@set_s[0]}"
       # puts "this is the second guess #{@guess}"
-      # puts "last feed back is #{@received_feedback}"
     end
   end
-
-  def removed_from_s
-    #iterate over set s to see what matches feedback.
-    @set_s.select! {|element| }
-    
-  end
-
-  def sent_feedback(feedback)
-    @received_feedback = feedback
-  end
-  
-  # def colours_correct?
-  #   colours = @guess.each.select do |cols| 
-  #     @code.any?(cols)
-  #   end
-  #     colours.length
-  # end
-
-  # def correct_position?
-  #   correct_position = @guess.each_with_index.count {|colour, position| @code[position] == colour}
-  #   puts [correct_position]
-  # end
-
-  
-  
 end
 
   
