@@ -17,12 +17,6 @@ class ComputerPlayer #< Player
     @code = colours.sample(4)
   end
 
-  # def set_s(code_length)
-  #   # number_of_colours = Array(0..code_length + 1)
-  #   # number_of_colours.repeated_permutation(4).to_a {|perm| p perm }
-    
-  # end
-
   def take_a_guess(colours)
     if @guess == nil
       @guess = colours[0], colours[0], colours[1], colours[1]

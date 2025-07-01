@@ -133,15 +133,4 @@ end
     end
   end
 
-  # def code_maker_code_correct?
-  #   # if valid_code?(@human.code)
-  #   if valid_code?(@code)
-  #     puts "Code looks good to me"
-  #     @code = @human.code
-  #   else
-  #     puts "That code aint right"
-  #   end
-  #     keep_guessing
-  # end
-  
 end
