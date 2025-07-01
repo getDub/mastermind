@@ -1,5 +1,5 @@
 class Game
-  attr_accessor :computer, :human, :code, :code_to_break, :attempts, :guess, :colours
+  attr_accessor :computer, :human, :code, :code_to_break, :attempts, :guess, :colours, :test
   
   COLOURS = ['red', 'green', 'blue', 'cyan', 'pink', 'yellow'].freeze
   CODE_LENGTH = 4
@@ -13,7 +13,7 @@ class Game
     @attempts = 0
     @guess = nil
     @code = nil
-    @feedback = nil
+    @feedback
   end
   
   def start
@@ -24,6 +24,9 @@ class Game
 
 # Press 1 = Code maker = code
 # Press 2 = Code breaker = guess
+def test
+  puts "it works baby"
+end
 
 
   def welcome
@@ -65,6 +68,7 @@ class Game
       if human.choice == 1? @guess = @computer.take_a_guess(COLOURS) : @guess = @human.players_guess
       # if human.choice == 1? @guess = @computer.take_a_guess(COLOURS) : @guess = @human.players_guess
         feedback_on_guess
+
         # @human.players_guess
       end
     end
@@ -79,23 +83,15 @@ class Game
   end
 
   def correct_position?
-    # code = computer_generated_code
-    # position = @human.guess.each_with_index.select do |colour, position|
     position = @guess.each_with_index.select do |colour, position|
-      # code[position].eql?(colour)
       @code[position].eql?(colour)
     end
     position.length
   end
   
   def colours_correct?
-    # code = computer_generated_code
-    # puts @guess
-    # puts "this is code from colours correct\n #{@code}\n and the gues is\n #{@guess}"
-    # colours = @human.guess.each.select do|cols| 
     colours = @guess.each.select do |cols| 
       @code.any?(cols)
-      # code.any?(cols)
     end
       colours.length
   end
@@ -116,6 +112,7 @@ class Game
       puts "  Correct colour = #{colours_correct?}\n  Correct colour and position = #{correct_position?}"
       @feedback = [correct_position?, colours_correct?]
       puts "feedback = #{@feedback}"#delete once finished
+      @computer.sent_feedback(@feedback)
     else
       puts "\n !!Your code doesn't look right.\n Check you have #{CODE_LENGTH} colours and they are spelled correctly."
       @attempts -= 1
