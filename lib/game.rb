@@ -24,10 +24,6 @@ class Game
 
 # Press 1 = Code maker = code
 # Press 2 = Code breaker = guess
-def test
-  puts "it works baby"
-end
-
 
   def welcome
     puts "Thanks #{human.name}, would you like to be the Code maker (press 1) or the Code Breaker (press 2)"
@@ -86,6 +82,7 @@ end
     position = @guess.each_with_index.select do |colour, position|
       @code[position].eql?(colour)
     end
+    # puts position
     position.length
   end
   
@@ -109,8 +106,8 @@ end
     # if valid_code?(@human.guess)
     if valid_code?(@guess)
       puts "The guess = #{@guess}"
-      puts "  Correct colour = #{colours_correct?}\n  Correct colour and position = #{correct_position?}"
-      @feedback = [correct_position?, colours_correct?]
+      puts "  Correct colour and position = #{correct_position?}\n  Correct colour wrong place = #{colours_correct? - correct_position?}"
+      @feedback = [correct_position?, colours_correct? - correct_position?]
       puts "feedback = #{@feedback}"#delete once finished
       @computer.sent_feedback(@feedback)
     else
