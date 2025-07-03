@@ -79,20 +79,20 @@ class Game
   end
 
   def correct_position?
-    position = @guess.each_with_index.select do |colour, position|
-      @code[position].eql?(colour)
-    end
-    # puts position
-    position.length
+    @guess.each_with_index.count {|colour, idx| colour == @code[idx] }
   end
   
   def colours_correct?
-    colours = @guess.each.select do |cols| 
-      @code.any?(cols)
-    end
-      colours.length
+    common_elements(@guess, @code)
   end
    
+  #thanks to Naelson.exe for this bit of code.
+  def common_elements(guess, code)
+    tally1 = guess.tally
+    tally2 = code.tally
+    tally1.sum { | colour, count| [count, tally2[colour] || 0].min }
+  end
+
   def valid_code?(guess_or_code)
     guess_or_code.length == CODE_LENGTH && guess_or_code.all? { |colour| COLOURS.include?(colour)}
   end
@@ -103,7 +103,6 @@ class Game
   end
   
   def feedback_on_guess
-    # if valid_code?(@human.guess)
     if valid_code?(@guess)
       puts "The guess = #{@guess}"
       puts "  Correct colour and position = #{correct_position?}\n  Correct colour wrong place = #{colours_correct? - correct_position?}"
