@@ -1,12 +1,11 @@
-class HumanPlayer #< Player
+class HumanPlayer
       
-  attr_accessor :name, :guess, :choice, :code
+  attr_accessor :name, :choice, :code
 
   def initialize(name = gets.chomp)
     @name = name
-    @guess
     @choice = nil
-    @code
+    @code = nil
   end
 
   def players_guess
@@ -15,12 +14,10 @@ class HumanPlayer #< Player
 
   def code_breaker_or_maker?
     @choice = gets.chomp.to_i
-    # puts @choice.class
   end
 
   def make_code
-    @code = gets.chomp.split#.map(&:capitalize)
-    puts @code
+    @code = gets.chomp.split
   end
   
 end

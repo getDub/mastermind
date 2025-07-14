@@ -6,10 +6,9 @@ class Game
   MAX_ATTEMPTS = 5
 
   def initialize(human_player_class)
-    # puts @human_player_name = Player.new(self)
     puts 'Hi player, please enter your name.'
-    puts @human = human_player_class.new#(self)
-    puts @computer = ComputerPlayer.new(COLOURS, CODE_LENGTH)#(self)
+    puts @human = human_player_class.new
+    puts @computer = ComputerPlayer.new(COLOURS, CODE_LENGTH)
     @attempts = 0
     @guess = nil
     @code = nil
@@ -22,9 +21,6 @@ class Game
     play_game
   end
 
-# Press 1 = Code maker = code
-# Press 2 = Code breaker = guess
-
   def welcome
     puts "Thanks #{human.name}, would you like to be the Code maker (press 1) or the Code Breaker (press 2)"
     human.code_breaker_or_maker?
@@ -33,13 +29,11 @@ class Game
   def game_setup
     if human.choice == 1
       puts "#{human.name} you have chosen to be the Code maker.\n There are 6 colours to choose from, (Red, Green, Blue, Pink, Yellow).  \n Choose only 4 colours to make your code. No commas just a space between each colour."
-      # @computer.set_s(CODE_LENGTH)
       loop do
         input = human.make_code
           if valid_code?(input)
             puts "Code looks good to me"
             @code = input
-            # puts "valid? = @code = #{@code} and human code = #{@human.code}"
             break
           else
             puts "That code aint right"
@@ -48,28 +42,25 @@ class Game
           end
             keep_guessing
           end
-    else #human.choice == 2
+    else 
       puts "Thanks #{human.name}, Welcome to Mastermind. \nCan you crack the Codmaker's code by guessing the 4 colours in the correct postion? \nThere are 6 possible colours to choose from, (Red, Green, Blue, Pink, Yellow).  \nYou have 12 attempts to break the code.   \nThe Computer has generated a code for you to break.\n    |--?--|--?--|--?--|--?--|  \nPlease enter your first 4 guesses. No commas just a space between each colour."
-      puts @code = @computer.code_to_break(COLOURS) #don't print to screen once finished.
+      @code = @computer.code_to_break(COLOURS) 
     end
   end
 
   def play_game
-  # def start
-    # welcome
-    # game_setup
-    while @attempts < MAX_ATTEMPTS do
-      #end
+    while @attempts < MAX_ATTEMPTS 
       puts "\n--- Code break attempt #{@attempts += 1} ---"
-      if human.choice == 1? @guess = @computer.take_a_guess(COLOURS) : @guess = @human.players_guess
-      # if human.choice == 1? @guess = @computer.take_a_guess(COLOURS) : @guess = @human.players_guess
-        feedback_on_guess
-
-        # @human.players_guess
+      if human.choice == 1
+        @guess = @computer.take_a_guess(COLOURS) 
+      else 
+        @guess = @human.players_guess
       end
+    feedback_on_guess
     end
   end
 
+  #is this being used?
   def computer_generated_code
     computer.code
   end
@@ -86,7 +77,6 @@ class Game
     common_elements(@guess, @code)
   end
    
-  #thanks to Naelson.exe for this bit of code.
   def common_elements(guess, code)
     tally1 = guess.tally
     tally2 = code.tally
@@ -107,8 +97,7 @@ class Game
       puts "The guess = #{@guess}"
       puts "  Correct colour and position = #{correct_position?}\n  Correct colour wrong place = #{colours_correct? - correct_position?}"
       @feedback = [correct_position?, colours_correct? - correct_position?]
-      puts "feedback = #{@feedback}"#delete once finished
-      @computer.sent_feedback(@feedback)
+      @computer.sent_feedback(@guess, @feedback)
     else
       puts "\n !!Your code doesn't look right.\n Check you have #{CODE_LENGTH} colours and they are spelled correctly."
       @attempts -= 1
@@ -124,7 +113,7 @@ class Game
     if guess_limit_reached?
       puts "YOU LOOSE.\nYou've had 12 guesses and haven't broken the code."
     elsif win?
-      puts "YOU WIN BUDDY!"
+      puts "YOU WIN! DO IT LADY!"
     else keep_guessing
     end
   end
